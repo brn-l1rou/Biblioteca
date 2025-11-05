@@ -59,4 +59,20 @@ public class CategoriaController {
                                .collect(Collectors.toList());
         return "redirect:/categorias";
     }
+
+    @GetMapping("/editar/{id}")
+    public String exibirFormularioEdicao(@PathVariable("id") Long id, Model model) {
+    
+        Categoria categoria = categorias.stream()
+            .filter(c -> c.getId().equals(id))
+            .findFirst()
+            .orElse(null);
+
+        if (categoria == null) {
+            return "redirect:/categorias"; 
+        }
+
+        model.addAttribute("categoria", categoria); 
+        return "categorias/cadastro"; 
+}
 }
