@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Livros</title>
+</head>
+<body>
+    <h1>Acervo da Biblioteca</h1>
+
+    <p><a th:href="@{/livros/novo}">+ Cadastrar Novo Livro</a></p>
+
+    <table border = "1">
+        <thead>
+            <tr>
+                <th>Titulo</th>
+                <th>Autor</th>
+                <th>Categoria</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="livro : ${listaDeLivros}">
+                <td th:text="${livro.titulo}">Titulo Simulado</td>
+                <td th:text="${livro.autor}">Autor Simulado</td>
+                <td th:text="${livro.categoria.descricao}">Categoria Simulado</td>
+                <td>
+                    <a th:href="@{/livros/{id}(id=${livro.id})}">Detalhes</a>
+                    <a th:href="@{/livros/excluir/{id}(id=${livro.id})}">Excluir</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

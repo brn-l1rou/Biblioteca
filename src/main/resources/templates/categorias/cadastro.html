@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Categoria</title>
+</head>
+<body>
+    <h1>Cadastro de Categoria</h1>
+    
+    <form th:action="@{/categorias}" th:object="${categoria}" method="post">
+        <input type="hidden" th:fiel="*{id}">
+
+        <label for="nome">Nome da Categoria:</label>
+        <input type="text" id="nome" th:field="*{nome}" required><br><br>
+
+        <button type="submit">Salvar Categoria</button>
+    </form>
+
+    <p><a th:href="@{/categorias}">Voltar para a Lista de Categorias</a></p>
+</body>
+</html>

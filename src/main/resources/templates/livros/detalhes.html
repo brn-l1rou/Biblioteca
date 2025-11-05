@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Detalhes: ' + ${livro.titulo}">Detalhes do Livro</title>
+</head>
+</head>
+<body>
+    <h1 th:text="${livro.titulo}">Titulo do Livro</h1>
+
+    <p><strong>ID:</strong> <span th:text="${livro.id}"></span></p>
+    <p><strong>Autor:</strong> <span th:text="${livro.autor}"></span></p>
+    <p><strong>Categoria:</strong><span th:text="${livro.categoria.descricao}"></span></p> 
+    <p><strong>Ano de Publicação:</strong> <span th:text="${livro.anoPublicacao}"></span></p>
+    <p><strong>Estoque:</strong> <span th:text="${livro.estoque}"></span></p>
+    
+    <hr>
+    <p>
+        <a th:href="@{/livros/editar/{id}(id=${livro.id})}">Editar Livro</a>
+        <a th:href="@{/}">Voltar para a Lista</a>
+    </p>
+    
+</body>
+</html>
+ <!--
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Detalhes: ' + ${livro.titulo}">Detalhes do Livro</title>
+</head>
+<body>
+    <h1 th:text="${livro.titulo}">Título</h1>
+    
+    <p><a th:href="@{/}">Voltar para a Lista</a></p>
+</body>
+</html>-->
