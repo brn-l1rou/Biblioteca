@@ -24,7 +24,7 @@ public class LivroController {
         livros.add(new Livro(3L, "O Fim da Infância", "Arthur C. Clarke", CategoriaEnum.FICCAO, 1953, 7));
     }
 
-    @GetMapping("/")
+    @GetMapping("/livros")
     public String listarLivros(Model model){
         model.addAttribute("listaDeLivros", livros);
         return "livros/lista";
@@ -52,7 +52,7 @@ public class LivroController {
             }
         }
         System.out.println("Livro salvo (simulado): " + livro.getTitulo());
-        return "redirect:/";
+        return "redirect:/livros";
     }
 
     @GetMapping("livros/excluir/{id}")
@@ -61,7 +61,7 @@ public class LivroController {
                  .filter(l -> !l.getId().equals(id))
                  .collect(Collectors.toList());
 
-        return "redirect:/";
+        return "redirect:/livros";
     }
 
     @GetMapping("/livros/{id}")
@@ -72,7 +72,7 @@ public class LivroController {
                             .orElse(null);
 
         if(livro == null){
-            return "redirect:/";
+            return "redirect:/livros";
         }
         model.addAttribute("livro", livro);
         return "livros/detalhes";
@@ -85,7 +85,7 @@ public class LivroController {
                             .findFirst()
                             .orElse(null);
         if(livro == null){
-            return "redirect:/";
+            return "redirect:/livros";
         }
 
         model.addAttribute("livro", livro);

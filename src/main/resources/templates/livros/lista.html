@@ -1,38 +1,41 @@
-<!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Livros</title>
+    <title>Acervo de Livros</title>
 </head>
 <body>
-    <h1>Acervo da Biblioteca</h1>
+    
+    <div layout:fragment="content">
+        
+        <h1 class="mb-4">Acervo da Biblioteca</h1>
 
-    <p>
-        <a th:href="@{/livros/novo}">+ Cadastrar Novo Livro</a>
-        <a th:href="@{/categorias}">+ Gerenciar Categorias</a>
-    </p>
+        <a th:href="@{/livros/novo}" class="btn btn-primary me-2">+ Cadastrar Novo Livro</a>
+        <a th:href="@{/categorias}" class="btn btn-primary me-2">+ Gerenciar Categorias</a>
+        <a th:href="@{/}" class="btn btn-secondary">Voltar para a Home</a>
 
-    <table border = "1">
-        <thead>
-            <tr>
-                <th>Titulo</th>
-                <th>Autor</th>
-                <th>Categoria</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="livro : ${listaDeLivros}">
-                <td th:text="${livro.titulo}">Titulo Simulado</td>
-                <td th:text="${livro.autor}">Autor Simulado</td>
-                <td th:text="${livro.categoria.descricao}">Categoria Simulado</td>
-                <td>
-                    <a th:href="@{/livros/{id}(id=${livro.id})}">Detalhes</a>
-                    <a th:href="@{/livros/excluir/{id}(id=${livro.id})}">Excluir</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+        <table class="table table-striped table-hover mt-4">
+            <thead>
+                <tr>
+                    <th>Titulo</th>
+                    <th>Autor</th>
+                    <th>Categoria</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="livro : ${listaDeLivros}">
+                    <td th:text="${livro.titulo}">Titulo Simulado</td>
+                    <td th:text="${livro.autor}">Autor Simulado</td>
+                    <td th:text="${livro.categoria.descricao}">Categoria Simulado</td>
+                    <td>
+                        <a th:href="@{/livros/{id}(id=${livro.id})}" class="btn btn-sm btn-info me-1">Detalhes</a>
+                        <a th:href="@{/livros/editar/{id}(id=${livro.id})}" class="btn btn-sm btn-warning me-1">Editar</a>
+                        <a th:href="@{/livros/excluir/{id}(id=${livro.id})}" class="btn btn-sm btn-danger">Excluir</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

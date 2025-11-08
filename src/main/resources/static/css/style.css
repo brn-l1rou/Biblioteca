@@ -1,0 +1,95 @@
+:root{
+
+    --background-color: #f8f9fa;
+    --text-color: #212529;
+    --card-bg: #ffffff;
+    --card-border: #e2e6ea;
+    --nav-bg: #ffffff;
+}
+
+.light-theme{
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.dark-theme{
+    --background-color: #212429;
+    --text-color: #f8f9fa;
+    --card-bg: #343a40;
+    --card-border: #495058;
+    --nav-bg: #343a40;
+
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.dark-theme h1,
+.dark-theme h2,
+.dark-theme h3,
+.dark-theme p {
+    color: var(--text-color) !important;
+}
+
+.dark-theme .navbar-brand,
+.dark-theme .nav-link,
+.dark-theme .navbar a{
+    color: var(--text-color) !important;
+}
+
+.dark-theme .table{
+    --bs-table-bg: var(--card-bg);
+    --bs-table-color: var(--text-color);
+    --bs-table-border-color: var(--card-border);
+}
+
+.dark-theme .table td,
+.dark-theme .table th{
+    color: var(--text-color) !important;
+}
+
+.dark-theme .table-striped > tbody > tr:nth-child(even) > * {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark-theme .card{
+    background-color: var(--card-bg) !important;
+    border-color: var(--card-border) !important;
+    color: var(--text-color) !important;
+}
+
+.dark-theme input,
+.dark-theme select,
+.dark-theme textarea{
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border-color: var(--card-border);
+}
+
+.dark-theme #theme-toggle{
+    color: #f8f9fa;
+    border-color: #f8f9fa;
+}
+
+.dark-theme .btn-secondary,
+.dark-theme .btn-outline-secondary,
+.dark-theme .btn-light,
+.dark-theme .btn-sucess{
+    border-color: var(--text-color) !important;
+    color: var(--text-color) !important;
+    background-color: transparent !important;
+}
+
+.dark-theme .navbar a{
+    color: var(--text-color) !important;
+}
+
+.dark-theme .bg-light,
+.dark-theme .navbar {
+    --bs-bg-opacity: 1;
+    background-color: var(--nav-bg) !important;
+}
+
+.dark-theme .navbar-light {
+    --bs-navbar-color: var(--text-color);
+    --bs-navbar-brand-color: var(--text-color);
+}

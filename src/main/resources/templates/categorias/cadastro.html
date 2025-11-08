@@ -1,22 +1,24 @@
-<!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Categoria</title>
 </head>
 <body>
-    <h1>Cadastro de Categoria</h1>
-    
-    <form th:action="@{/categorias}" th:object="${categoria}" method="post">
-        <input type="hidden" th:fiel="*{id}">
+    <div layout:fragment="content">
+        <h1 class="mb-4">Cadastro de Categoria</h1>
+        
+        <form th:action="@{/categorias}" th:object="${categoria}" method="post">
+            <input type="hidden" th:fiel="*{id}">
 
-        <label for="nome">Nome da Categoria:</label>
-        <input type="text" id="nome" th:field="*{nome}" required><br><br>
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome da Categoria:</label>
+                <input type="text" id="nome" th:field="*{nome}" class="form-label" required><br><br>
+            </div>
 
-        <button type="submit">Salvar Categoria</button>
-    </form>
-
-    <p><a th:href="@{/categorias}">Voltar para a Lista de Categorias</a></p>
+            <button type="submit" class="btn btn-sucess me-2">Salvar Categoria</button>
+            <p><a th:href="@{/categorias}" class="btn btn-outline-secondary">Voltar para a Lista de Categorias</a></p>
+        </form>
+    </div>
 </body>
 </html>

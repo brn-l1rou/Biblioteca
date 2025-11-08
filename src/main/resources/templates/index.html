@@ -1,0 +1,35 @@
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"> <head>
+    <title>Início</title> 
+</head>
+<body>
+    <div layout:fragment="content"> 
+
+        <header>
+            <h1 class="text-center display-4">📚 Sistema de Gerenciamento de Biblioteca Digital</h1>
+            <p class="text-center lead">Projeto de Programação Orientada a Objetos (POO)</p>
+        </header>
+
+        <main class="mt-5">
+            <h2 class="text-center mb-4">Acesso Rápido</h2>
+            
+            <div class="row justify-content-center">
+                <div class="col-md-5 mb-3">
+                    <div class="card shadow-sm p-4 h-100">
+                        <h3><a th:href="@{/livros}" class="text-decoration-none">Gerenciar Acervo de Livros</a></h3>
+                        <p>Acesse a lista completa de livros e utilize as funções CRUD.</p>
+                    </div>
+                </div>
+                <div class="col-md-5 mb-3">
+                    <div class="card shadow-sm p-4 h-100">
+                        <h3><a th:href="@{/categorias}" class="text-decoration-none">Administração de Categorias</a></h3>
+                        <p>Área restrita para cadastrar e manter as categorias.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+    </div>
+</body>
+</html>
