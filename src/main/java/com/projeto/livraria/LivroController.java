@@ -38,6 +38,14 @@ public class LivroController {
 
     @PostMapping("/livros")
     public String salvarLivro(Livro livro){
+        if(livro.getAnoPublicacao() <= 0){
+            System.out.println("Ano de publicação inválido.");
+            return "redirect:/livros/novo";
+        }
+        if (livro.getEstoque() < 0) {
+            System.out.println("Estoque negativo.");
+            return "redirect:/livros/novo"; 
+        }
         if(livro.getId() == null || livro.getId() == 0){
             livro.setId(nextId++);
             livros.add(livro);
@@ -49,6 +57,8 @@ public class LivroController {
             if(livroExistente != null){
                 livroExistente.setTitulo(livro.getTitulo());
                 livroExistente.setAutor(livro.getAutor());
+                livroExistente.setAnoPublicacao(livro.getAnoPublicacao()); 
+                livroExistente.setEstoque(livro.getEstoque());
             }
         }
         System.out.println("Livro salvo (simulado): " + livro.getTitulo());
