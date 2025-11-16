@@ -18,6 +18,7 @@
             <thead>
                 <tr>
                     <th>Titulo</th>
+                    <th>Capa</th>
                     <th>Autor</th>
                     <th>Categoria</th>
                     <th>Ações</th>
@@ -26,8 +27,11 @@
             <tbody>
                 <tr th:each="livro : ${listaDeLivros}">
                     <td th:text="${livro.titulo}">Titulo Simulado</td>
+                    <td>
+                        <img th:src="@{${livro.capaUrl}}" alt="Capa do Livro" style="width: 50px; height: auto;" class="rounded shadow-sm">
+                    </td>
                     <td th:text="${livro.autor}">Autor Simulado</td>
-                    <td th:text="${livro.categoria.descricao}">Categoria Simulado</td>
+                    <td th:text="${livro.categoria.nome}">Categoria Simulado</td>
                     <td>
                         <a th:href="@{/livros/{id}(id=${livro.id})}" class="btn btn-sm btn-info me-1">Detalhes</a>
                         <a th:href="@{/livros/editar/{id}(id=${livro.id})}" class="btn btn-sm btn-warning me-1">Editar</a>

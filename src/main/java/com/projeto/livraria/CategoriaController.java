@@ -1,9 +1,6 @@
 package com.projeto.livraria;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,23 +9,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.projeto.livraria.model.Categoria;
+import com.projeto.livraria.repository.CategoriaRepository;
 
 
 @Controller
 @RequestMapping("/categorias")
 public class CategoriaController {
-    private List<Categoria> categorias = new ArrayList<>();
-    private long nextId = 4L;
-
-    {
-        categorias.add(new Categoria(1L, "Ficção Científica"));
-        categorias.add(new Categoria(2L, "Romance Histórico"));
-        categorias.add(new Categoria(3L, "Autoajuda"));
-    }
+    
+    @Autowired
+    private CategoriaRepository categoriaRepository;
 
     @GetMapping
     public String listarCategorias(Model model){
-        model.addAttribute("listaDeCategorias", categorias);
+        model.addAttribute("listaDeCategorias", categoriaRepository.findAll());
         return "categorias/lista";
     }
 
@@ -40,33 +33,20 @@ public class CategoriaController {
 
     @PostMapping
     public String salvarCategoria(Categoria categoria){
-        if (categoria.getId() == null || categoria.getId() == 0){
-            categoria.setId(nextId++);
-            categorias.add(categoria);
-        } else{
-            categorias.stream()
-                      .filter(c -> c.getId().equals(categoria.getId()))
-                      .findFirst()
-                      .ifPresent(c -> c.setNome(categoria.getNome()));
-        }
+        categoriaRepository.save(categoria);
         return "redirect:/categorias";
     }
 
     @GetMapping("/excluir/{id}")
     public String excluirCategoria(@PathVariable("id") Long id){
-        categorias = categorias.stream()
-                               .filter(c -> !c.getId().equals(id))
-                               .collect(Collectors.toList());
+        categoriaRepository.deleteById(id);
         return "redirect:/categorias";
     }
 
     @GetMapping("/editar/{id}")
     public String exibirFormularioEdicao(@PathVariable("id") Long id, Model model) {
     
-        Categoria categoria = categorias.stream()
-            .filter(c -> c.getId().equals(id))
-            .findFirst()
-            .orElse(null);
+        Categoria categoria = categoriaRepository.findById(id).orElse(null);
 
         if (categoria == null) {
             return "redirect:/categorias"; 
@@ -74,5 +54,5 @@ public class CategoriaController {
 
         model.addAttribute("categoria", categoria); 
         return "categorias/cadastro"; 
-}
+    }
 }

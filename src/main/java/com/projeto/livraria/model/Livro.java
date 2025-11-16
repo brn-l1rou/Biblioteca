@@ -1,23 +1,54 @@
 package com.projeto.livraria.model;
 
-public class Livro {
-    private Long id;
-    private String titulo;
-    private String autor;
-    private CategoriaEnum categoria;
-    private int anoPublicacao;
-    private int estoque;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
-    public Livro(Long id, String titulo, String autor, CategoriaEnum categoria, int anoPublicacao, int estoque) {
+@Entity
+@Table(name = "livro")
+public class Livro {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 255)
+    private String titulo;
+
+    @Column(nullable = false, length = 255)
+    private String autor;
+
+    @Column(name = "ano_publicacao", nullable = false)
+    private Integer anoPublicacao;
+
+    @Column(nullable = false)
+    private Integer estoque;
+
+    @Column(name = "capa_url")
+    private String capaUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "categoria_id", nullable  = false)
+    private Categoria categoria;
+
+    public Livro(){}
+    
+    public Livro(Long id, String titulo, String autor, Categoria categoria, Integer anoPublicacao, Integer estoque, String capaUrl) {
         this.anoPublicacao = anoPublicacao;
         this.autor = autor;
         this.estoque = estoque;
         this.id = id;
         this.categoria = categoria;
         this.titulo = titulo;
+        this.capaUrl = capaUrl;
     }
 
-    public Livro(){}
+    
 
     public Long getId() {
         return id;
@@ -31,16 +62,20 @@ public class Livro {
         return autor;
     }
 
-    public CategoriaEnum getCategoria() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public int getAnoPublicacao() {
+    public Integer getAnoPublicacao() {
         return anoPublicacao;
     }
 
-    public int getEstoque() {
+    public Integer getEstoque() {
         return estoque;
+    }
+
+    public String getCapaUrl(){
+        return capaUrl;
     }
 
     public void setId(Long id) {
@@ -55,19 +90,20 @@ public class Livro {
         this.autor = autor;
     }
 
-    public void setCategoria(CategoriaEnum categoria) {
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 
-    public void setAnoPublicacao(int anoPublicacao) {
+    public void setAnoPublicacao(Integer anoPublicacao) {
         this.anoPublicacao = anoPublicacao;
     }
 
-    public void setEstoque(int estoque) {
+    public void setEstoque(Integer estoque) {
         this.estoque = estoque;
     }
 
-
-
+    public void setCapaUrl(String capaUrl){
+        this.capaUrl = capaUrl;
+    }    
 
 }

@@ -5,21 +5,34 @@
     <title th:text="'Detalhes: ' + ${livro.titulo}">Detalhes do Livro</title>
 </head>
 <body>
+<div layout:fragment="content">
+    <h1 class="mb-4 text-center" th:text="${livro.titulo}">Título do Livro</h1>
     
-    <div layout:fragment="content">
-        <h1 th:text="${livro.titulo}">Titulo do Livro</h1>
-
-        <div class="card p-4 shadow-sm">
-            <p><strong>ID:</strong> <span th:text="${livro.id}"></span></p>
-            <p><strong>Autor:</strong> <span th:text="${livro.autor}"></span></p>
-            <p><strong>Categoria:</strong> <span th:text="${livro.categoria.descricao}"></span></p> 
-            <p><strong>Ano de Publicação:</strong> <span th:text="${livro.anoPublicacao}"></span></p>
-            <p><strong>Estoque:</strong> <span th:text="${livro.estoque}"></span></p>
-        </div>
-        <div class="mt-4">
-            <a th:href="@{/livros/editar/{id}(id=${livro.id})}" class="btn btn-warning me-2">Editar Livro</a>
-            <a th:href="@{/livros}" class="btn btn-secondary">Voltar para a Lista</a>
+    <div class="row justify-content-center"> 
+        <div class="col-md-10 col-lg-8"> 
+            <div class="card p-4 shadow-sm">
+                <div class="row">
+                    <div class="col-md-5 d-flex flex-column align-items-center justify-content-center mb-3 mb-md-0">
+                        <img th:src="@{${livro.capaUrl}}" alt="Capa do Livro" class="img-fluid rounded shadow-lg" style="max-height: 400px; width: auto;">
+                    </div>
+                    <div class="col-md-7">
+                        <h4 class="mb-3">Informações do Livro</h4>
+                        <p><strong>ID:</strong> <span th:text="${livro.id}"></span></p>
+                        <p><strong>Autor:</strong> <span th:text="${livro.autor}"></span></p>
+                        <p><strong>Categoria:</strong> <span th:text="${livro.categoria.nome}"></span></p> 
+                        <p><strong>Ano de Publicação:</strong> <span th:text="${livro.anoPublicacao}"></span></p>
+                        <p><strong>Estoque:</strong> <span th:text="${livro.estoque}"></span></p>
+                        <p><strong>URL da Capa:</strong> <span th:text="${livro.capaUrl}"></span></p> 
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4 text-center"> 
+                <a th:href="@{/livros/editar/{id}(id=${livro.id})}" class="btn btn-warning me-2">Editar Livro</a>
+                <a th:href="@{/livros}" class="btn btn-secondary">Voltar para a Lista</a>
+            </div>
         </div>
     </div>
+</div>
 </body>
 </html>

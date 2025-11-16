@@ -1,85 +1,67 @@
 package com.projeto.livraria;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.projeto.livraria.model.CategoriaEnum;
 import com.projeto.livraria.model.Livro;
+import com.projeto.livraria.repository.CategoriaRepository;
+import com.projeto.livraria.repository.LivroRepository;
 
 @Controller
+@RequestMapping("/livros")
 public class LivroController {
-    private  List<Livro> livros = new ArrayList<>();
-    private  Long nextId = 4L;
 
-    {
-        livros.add(new Livro(1L, "O Senhor dos Anéis", "J.R.R. Tolkien", CategoriaEnum.FANTASIA, 1954, 15));
-        livros.add(new Livro(2L, "Fahreinheit 451", "Ray Bradbury", CategoriaEnum.FICCAO, 1953, 10));
-        livros.add(new Livro(3L, "O Fim da Infância", "Arthur C. Clarke", CategoriaEnum.FICCAO, 1953, 7));
-    }
+    @Autowired
+    private LivroRepository livroRepository;
 
-    @GetMapping("/livros")
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
+    private static final String UPLOAD_DIR = "C:/livraria-uploads/img";    
+
+
+    @GetMapping
     public String listarLivros(Model model){
-        model.addAttribute("listaDeLivros", livros);
+        model.addAttribute("listaDeLivros", livroRepository.findAll());
         return "livros/lista";
     }
 
-    @GetMapping("/livros/novo")
+    @GetMapping("/novo")
     public String exibirFormularioCadastro(Model model){
         model.addAttribute("livro", new Livro());
+        model.addAttribute("categorias", categoriaRepository.findAll());
         return "livros/cadastro";
     }
 
-    @PostMapping("/livros")
-    public String salvarLivro(Livro livro){
-        if(livro.getAnoPublicacao() <= 0){
-            System.out.println("Ano de publicação inválido.");
-            return "redirect:/livros/novo";
+    @GetMapping("/editar/{id}")
+    public String exibirFormularioEdicao(@PathVariable("id") Long id, Model model){
+        Livro livro = livroRepository.findById(id).orElse(null);
+
+        if(livro == null){
+            return "redirect:/livros";
         }
-        if (livro.getEstoque() < 0) {
-            System.out.println("Estoque negativo.");
-            return "redirect:/livros/novo"; 
-        }
-        if(livro.getId() == null || livro.getId() == 0){
-            livro.setId(nextId++);
-            livros.add(livro);
-        } else{
-            Livro livroExistente = livros.stream()
-                                   .filter(l -> l.getId()
-                                   .equals(livro.getId()))
-                                   .findFirst().orElse(null);
-            if(livroExistente != null){
-                livroExistente.setTitulo(livro.getTitulo());
-                livroExistente.setAutor(livro.getAutor());
-                livroExistente.setAnoPublicacao(livro.getAnoPublicacao()); 
-                livroExistente.setEstoque(livro.getEstoque());
-            }
-        }
-        System.out.println("Livro salvo (simulado): " + livro.getTitulo());
-        return "redirect:/livros";
+        
+        model.addAttribute("livro", livro);
+        model.addAttribute("categorias", categoriaRepository.findAll());
+        return "livros/cadastro";
     }
 
-    @GetMapping("livros/excluir/{id}")
-    public String excluirLivro(@PathVariable("id") Long id){
-        livros = livros.stream()
-                 .filter(l -> !l.getId().equals(id))
-                 .collect(Collectors.toList());
-
-        return "redirect:/livros";
-    }
-
-    @GetMapping("/livros/{id}")
+    @GetMapping("/{id}")
     public String exibirDetalhes(@PathVariable("id") Long id, Model model){
-        Livro livro = livros.stream()
-                            .filter(l -> l.getId().equals(id))
-                            .findFirst()
-                            .orElse(null);
+        Livro livro = livroRepository.findById(id).orElse(null);
 
         if(livro == null){
             return "redirect:/livros";
@@ -88,18 +70,52 @@ public class LivroController {
         return "livros/detalhes";
     }
 
-    @GetMapping("/livros/editar/{id}")
-    public String exibirFormularioEdicao(@PathVariable("id") Long id, Model model){
-        Livro livro = livros.stream()
-                            .filter(l -> l.getId().equals(id))
-                            .findFirst()
-                            .orElse(null);
-        if(livro == null){
-            return "redirect:/livros";
+    
+
+    @PostMapping
+    public String salvarLivro(@ModelAttribute Livro livro,
+                              @RequestParam("file") MultipartFile file){
+        
+        if (livro.getCategoria() != null && livro.getCategoria().getId() != null) {
+            categoriaRepository.findById(livro.getCategoria().getId())
+            .ifPresent(livro::setCategoria);
         }
 
-        model.addAttribute("livro", livro);
-        return "livros/cadastro";
+        if (!file.isEmpty()) {
+            try {
+                Path uploadPath = Paths.get(UPLOAD_DIR);
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                String fileName = file.getOriginalFilename();
+                Path filePath = uploadPath.resolve(fileName);
+                
+                Files.copy(file.getInputStream(), filePath);
+
+                livro.setCapaUrl("/img/" + fileName); 
+
+            } catch (IOException e) {
+                livro.setCapaUrl("/img/default.png"); 
+            }
+        } else if (livro.getId() != null) {
+            Livro livroExistente = livroRepository.findById(livro.getId()).orElse(null);
+            if (livroExistente != null) {
+                livro.setCapaUrl(livroExistente.getCapaUrl());
+            }
+        }
+        
+        
+        livroRepository.save(livro); 
+        return "redirect:/livros";
     }
+
+    @GetMapping("/excluir/{id}")
+    public String excluirLivro(@PathVariable("id") Long id){
+        livroRepository.deleteById(id);
+        return "redirect:/livros";
+    }
+
+
     
 }

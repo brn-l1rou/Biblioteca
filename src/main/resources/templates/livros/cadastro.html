@@ -9,7 +9,11 @@
     <div layout:fragment="content">
         <h1 class="mb-4">Cadastro de Livro</h1>
 
-        <form th:action="@{/livros}" th:object="${livro}" method="post">
+        <div th:if="${erro}">
+            <p th:text="${erro}"></p>
+        </div>
+
+        <form th:action="@{/livros}" th:object="${livro}" method="post" enctype="multipart/form-data">
 
             <input type="hidden" th:field="*{id}">
             <div class="row">
@@ -40,12 +44,25 @@
                 <label for="categoria" class="form-label">Categoria:</label>
                     <select id="categoria" th:field="*{categoria}" class="form-select" required>
                         <option value="">Selecione...</option>
-                        <option th:each="cat : ${T(com.projeto.livraria.model.CategoriaEnum).values()}"
-                                th:value="${cat}"
-                                th:text="${cat.descricao}">Ficcão                
+                        <option th:each="cat : ${categorias}"
+                                th:value="${cat.id}"
+                                th:text="${cat.nome}">Ficcão                
                         </option>
                     </select>
             </div>
+        
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="capaUrl" class="form-label">Capa do Livro:</label>
+                        <input type="file" id="capaFile" name="file" accept="image/*" class="form-control" onchange="updateFileName(this)"> 
+                        <input type="hidden" th:field="*{capaUrl}" class="form-control">
+
+                        <div th:if="${livro.capaUrl != null and livro.capaUrl != ''}" class="mt-2">
+                            <p>Capa Atual:</p>
+                            <img th:src="@{${livro.capaUrl}}" alt="Capa Atual" style="max-width: 150px; height: auto;" class="img-thumbnail">
+                        </div>
+                    </div>
+                </div>
             
             <div class="mt-4">
                 <button type="submit" class="btn btn-sucess me-2">Salvar Livro</button>
