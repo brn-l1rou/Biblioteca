@@ -9,19 +9,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.projeto.livraria.model.Categoria;
-import com.projeto.livraria.repository.CategoriaRepository;
-
+import com.projeto.livraria.service.CategoriaService;
 
 @Controller
 @RequestMapping("/categorias")
 public class CategoriaController {
     
     @Autowired
-    private CategoriaRepository categoriaRepository;
+    private CategoriaService categoriaService;
 
     @GetMapping
     public String listarCategorias(Model model){
-        model.addAttribute("listaDeCategorias", categoriaRepository.findAll());
+        model.addAttribute("listaDeCategorias", categoriaService.listarCategorias());
         return "categorias/lista";
     }
 
@@ -33,20 +32,24 @@ public class CategoriaController {
 
     @PostMapping
     public String salvarCategoria(Categoria categoria){
-        categoriaRepository.save(categoria);
+        if (categoria.getId() == null || categoria.getId() == 0){
+            categoriaService.inserirCategoria(categoria);
+        }else{
+            categoriaService.atualizarCategoria(categoria);
+        }
         return "redirect:/categorias";
     }
 
     @GetMapping("/excluir/{id}")
     public String excluirCategoria(@PathVariable("id") Long id){
-        categoriaRepository.deleteById(id);
+        categoriaService.deletarCategoria(id);
         return "redirect:/categorias";
     }
 
     @GetMapping("/editar/{id}")
     public String exibirFormularioEdicao(@PathVariable("id") Long id, Model model) {
     
-        Categoria categoria = categoriaRepository.findById(id).orElse(null);
+        Categoria categoria = categoriaService.obterCategoria(id);
 
         if (categoria == null) {
             return "redirect:/categorias"; 
