@@ -69,20 +69,15 @@ public class LivroController {
     public String salvarLivro(@ModelAttribute Livro livro,
                               @RequestParam("file") MultipartFile file,
                               Model model){
-        if (livro.getCategoria() == null || livro.getCategoria().getId() == null){
-            throw new IllegalArgumentException("Selecione uma categoria válida.");
-        }
-            try {
-                if (livro.getAnoPublicacao() == null) throw new IllegalArgumentException("Ano é obrigatório.");
-                if (livro.getEstoque() == null) throw new IllegalArgumentException("Estoque é obrigatório.");
 
+            try {
                 if (livro.getId() == null  || livro.getId() == 0){
                     livroService.inserirLivro(livro, file);
                 } else{
                     livroService.atualizarLivro(livro, file);
                 }
             } catch (IllegalArgumentException e) {
-                e.printStackTrace();
+                System.err.println("Erro de Validação: " + e.getMessage());
                 model.addAttribute("erro", e.getMessage());
                 model.addAttribute("livro", livro);
                 model.addAttribute("categorias", categoriaService.listarCategorias());
