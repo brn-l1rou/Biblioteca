@@ -1,9 +1,5 @@
 package com.projeto.livraria.service;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +14,6 @@ public class LivroService {
 
     @Autowired
     LivroDAO livroDAO;
-
-    private static final String UPLOAD_DIR = "C:/livraria-uploads/img";
 
     public ArrayList<Livro> listarLivros(){
         return livroDAO.listarLivros();
@@ -58,28 +52,26 @@ public class LivroService {
     private void processarUpload(Livro livro, MultipartFile file){
         if (file != null && !file.isEmpty()){
             try {
-                Path uploadPath = Paths.get(UPLOAD_DIR);
-                if (!Files.exists(uploadPath)){
-                    Files.createDirectories(uploadPath);
-                }
-                String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-                Path filePath = uploadPath.resolve(fileName);
 
-                Files.copy(file.getInputStream(), filePath);
+                String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
                 livro.setCapaUrl("/img/" + fileName);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 System.err.println("Erro de I/O ao tentar salvar imagem: " + e.getMessage());
                 livro.setCapaUrl("/img/default.png");
             }
         }else{
-            livro.setCapaUrl(null);
+            livro.setCapaUrl("/img/default.png");
         }
     }
 
     private void processarUploadOuManterUrl(Livro livro, MultipartFile file){
         if (file != null && !file.isEmpty()){
             processarUpload(livro, file);
+        }else{
+            Livro livroAntigo = livroDAO.obterLivro(livro.getId());
+            if (livroAntigo != null) {
+                livro.setCapaUrl(livroAntigo.getCapaUrl());
         }
     }
-
+}   
 }
